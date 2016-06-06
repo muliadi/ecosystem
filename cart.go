@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/satori/go.uuid"
 )
 
 //CartLine represents a single line in the cart
@@ -123,4 +124,10 @@ func UpdateQty(c *gin.Context) {
 		}
 	}
 
+}
+
+//NewCart returns a UUID to be used as the cart identifer (e.g. store in Local Storage on client)
+func NewCart(c *gin.Context) {
+	u1 := uuid.NewV1()
+	c.String(http.StatusOK, u1.String())
 }
