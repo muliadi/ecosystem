@@ -15,6 +15,7 @@ func InitDb() *gorp.DbMap {
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
 	dbmap.AddTableWithName(CartLine{}, "cartlines").SetKeys(true, "ID")
+	dbmap.AddTableWithName(User{}, "users").SetKeys(false, "Email")
 	err = dbmap.CreateTablesIfNotExists()
 	checkErr(err, "Create tables failed")
 	return dbmap
