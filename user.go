@@ -9,23 +9,25 @@ import (
 
 //User is
 type User struct {
-	Email    string
-	Password string
-	Token    string
+	Email string
+	Cart  string
 }
 
-//UserProfile displays the skeleton for the profile page
+//UserProfilePage displays the skeleton for the profile page which is basically an Intercooler content block
+//which requests profile content along with the token from local storage
 func UserProfilePage(c *gin.Context) {
 	c.HTML(http.StatusOK, "eco-profile-page.html", gin.H{})
 }
 
-//UserProfileContent fills in the profile page depending on whether the user is logged on or not and all sub-cases
+//UserProfileContent provides the content for the Intercooler block on the profile page.
+//Content depends on whether user is logged in or out, which in turn depends on the presence/validity
+//of the token from localstorage sent along depending on whether the user is logged in
 func UserProfileContent(c *gin.Context) {
 	//Get the token from Intercooler
 	tokenString := c.Query("token")
 	//Parse the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte("ecosystem"), nil
+		return []byte(Config["signingKey"]), nil
 	})
 	//Validate
 	if err == nil && token.Valid && token.Claims["email"].(string) != "" {
